@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+        }
+        .card{
+            width: 400px;
+            height: 700px;
+            perspective: 500px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate3d(-50%,-50%,0);
+            overflow: hidden;
+        }
+        .box{
+            width: 300px;
+            height: 500px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate3d(-50%,-50%,0);
+            transform-style: preserve-3d;
+            transition: 10s;
+        }
+        .box:hover{
+            transform:  translate3d(-50%,-50%,0) rotateX(90deg);
+        }
+        .box div{
+            width: 300px;
+            height: 500px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 20px;
+            transform: rotateY(0deg) translateX(-10px);
+            background: black;
+            transform-origin: -60px center ;
+            transition: 1s,opacity 0.1s 1s;
+        }
+        .box div:nth-of-type(2){
+            background: pink;
+            transform: rotateY(10deg) translateX(60px);
+        }
+        .box div:nth-of-type(3){
+            background: #8080ff;
+            transform: rotateY(20deg) translateX(130px);
+        }
+        .box div:nth-of-type(4){
+            background: #008000;
+            transform: rotateY(30deg) translateX(180px);
+        }
+        .box div:nth-of-type(5){
+            background: #ff8080;
+            transform: rotateY(40deg) translateX(260px);
+        }
+    </style>
+    </head>
+    
+    <body>
+        <div class="card">
+            <div class="box">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <script>
+            var card = document.querySelectorAll('.box div');
+            // console.log(card);
+            var positionArr = [];
+            var now = 0;
+
+            createPosition();
+            function createPosition(){
+                for(var i=0;i<card.length;i++){
+                    var arr = [];
+                    //以10deg进行层叠
+                    arr.push(i*10);
+                    //
+                    arr.push(i*60 + ((i-1)*10));
+                    positionArr.push(arr);
+                }
+                console.log(positionArr);
+                
+            }
+            document.onclick = function(){
+                card[now].style="";
+                card[now].style.transform="rotateY(-60deg) translateX(-400px)";
+                positionArr.unshift(positionArr[positionArr.length-1]);
+                positionArr.pop();
+
+                setTimeout(function(){
+                    Array.from(card).forEach((item,index)=>{
+                        if(index==now){
+                            item.style.opacity=0;
+                            return;
+                        }
+                        item.style.opacity = 1;
+                        item.style.transform = 'rotateY('+ positionArr[index][0]+'deg) translateX('+ positionArr[index][1]+'px)';
+                    })
+                    now++;
+                    if(now == card.length) now = 0;
+                },200)
+            }
+        </script>
+    </body>
+</html>

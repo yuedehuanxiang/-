@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html{
+            font-size: 4vw;
+        }
+        body{
+            margin: 0;
+            color: #2d4344;
+        }
+        .header{
+            height: 4rem;
+            display: flex;
+        }
+        .header .icon{
+            width: 4rem;
+            height: 4rem;
+            position: absolute;
+            left: 0;
+            background: url("img/filter.png") no-repeat;
+            background-size: 4rem 4rem;
+        }
+        .header .title{
+            flex: 1;
+            font-size: 1.2rem;
+            text-align: center;
+            line-height: 4rem;
+        }
+        .menuBox{
+            height: 1.2666667rem;
+            width: 100vw;
+            overflow: auto;
+        }
+        .menuBox .menu{
+            float: left;
+            display: flex;
+        }
+        .menuBox .menu span{
+            flex: 1;
+            text-align: center;
+            font-size: 0.6rem;
+            line-height: 1.133333rem;
+            padding: 0 0.6666667rem;
+        }
+        .scene{
+            width: 100vw;
+            height: 30rem;
+            perspective: 500px;
+            position: relative;
+            perspective-origin: right center;
+        }
+        .cardList{
+            width: 20rem;
+            height: 26.66666667rem;
+            position: absolute;
+            top: 1.6666667rem;
+            left: 2.5rem;
+            transform: translate3d(0,0,0);
+            transform-style: preserve-3d;
+            /* overflow: hidden; */
+        }
+        .cardList div{
+            width: 17.53333333rem;
+            height: 26.56666667rem;
+            border-radius: 0.3333rem;
+            background: #8080c0;
+            position: absolute;
+            top:0;
+            left: 0;
+            transform-origin: -2rem center;
+            /* transition: 0.5s,opacity 0.1s 0.9s; */
+            transform: rotateY(0deg) translateX(-0.33333rem);
+            box-shadow: 3px 3px 5px 0 rgab(0,0,0,0.4);
+        }
+        .cardList div img{
+            width: 100%;
+            height: 100%;
+        }
+        .cardList div:nth-child(2) {
+            background: #8d6ebc;
+        }
+        .cardList div:nth-child(3) {
+            background: #bcb26e;
+        }
+        .cardList div:nth-child(4) {
+            background: #db8064;
+        }
+        .cardList div:nth-child(5) {
+            background: #64d7db;
+        }
+        .priceBox{
+            height: 4.5333333rem;
+        }
+        .priceBox .left{
+            width: 13.3333rem;
+            display: inline-block;
+            height: 4.533333rem;
+            vertical-align: middle;
+            margin-left: 2.166666rem;
+        }
+        .priceBox .left .name{
+            height: 1.933333rem;
+            font-size: 1rem;
+            color: #804000;
+            line-height: 1.933333rem;
+            display: block;
+        }
+        .priceBox .left .price{
+            height: 2.6rem;
+            font-size: 1.6rem;
+            color: #2e2e2e;
+            line-height: 2.6rem;
+            display: block;
+        }
+        .priceBox .btn{
+            width: 6.66666667rem;
+            height: 2rem;
+            border-radius: 1rem;
+            background: #5b8fed;
+            color: #fff;   
+            font-size: 1rem;
+            line-height: 2rem;
+            text-align: center;
+            display: inline-block;
+            vertical-align: middle;        
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="icon"></div>
+        <div class="title">Shoes</div>
+    </div>
+    <div class="menuBox">
+        <div class="menu">
+            <span>Select</span>
+            <span>Brand</span>
+            <span>Consulting</span>
+            <span>New</span>
+            <span>Video</span>
+            <span>Discover</span>
+            <span>Sports</span>
+            <span>Travel</span>
+        </div>
+    </div>
+    <div class="scene">
+        <div class="cardList">
+            <div><img src="img/01.png"></div>
+            <div><img src="img/02.png"></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="priceBox">
+        <div class="left">
+            <span class="name">Nike Air Huarache</span>
+            <span class="price">￥529.00</span>
+        </div>
+        <div class="btn">payment</div>
+    </div>
+    <script>
+        var card = document.querySelectorAll('.cardList div');
+        var positionArr = [];
+        var now = 0;
+        var off = true;
+        // var openFilter = document.querySelector('.header .icon');
+        // var closeFileter = document.querySelector('filter .icon');
+        // var filter = document.querySelector('.filter');
+        createPosition();
+        function createPosition(){
+            for(var i=0;i<card.length;i++){
+                var arr = [];
+                arr.push(i*10);
+                arr.push(i*40);
+                positionArr.push(arr)
+                card[i].style.transform = 'rotateY('+i*10+'deg) translateX('+i*40+'px)';
+
+            }
+        }
+        console.log(positionArr);
+        
+        document.ontouchmove = function(){
+            if(!off){return}
+            off = false;
+            card[now].style = '';
+            card[now].style.transition = '1s,opacity 0.1s 0.3s';
+            card[now].style.transformOrigin = '-60/@rem bottom';
+            card[now].style.transform = 'rotateY(-20deg) translateX(-500px)';
+            positionArr.unshift(positionArr[positionArr.length - 1]);
+            positionArr.pop();
+
+            setTimeout(()=>{
+                Array.from(card).forEach((item,index)=>{
+                    if (index == now) {
+                        item.style.opacity = 0;
+                        return
+                    }
+                    item.style.opacity = 1;
+                    item.style.transition = '1s,opacity 0.1s 0.8s';
+                    item.style.transform = 'rotateY(' + positionArr[index][0] + 'deg) translateX(' + positionArr[index][1] / 30 + 'rem)';
+                });
+                now++;
+                if (now == card.length) {
+                    now = 0;
+                }
+            }, 100);
+
+            setTimeout(() => {
+                off = true;
+            },500)
+        }
+    </script>
+</body>
+</html>
